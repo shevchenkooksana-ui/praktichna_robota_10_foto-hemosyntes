@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Розв’язування задач: фотосинтез і хемосинтез</title>
+<style>
+:root{
+  --bg:#f3f7f2; --card:#ffffff; --ink:#13241a; --muted:#46594d; --line:#cfdccf;
+  --green:#1b7a48; --green-d:#125734; --green-l:#e3f3e8;
+  --amber:#8a5a00; --amber-l:#fff3d6; --red:#b3261e; --red-l:#fde8e6; --blue:#1b4f8a; --blue-l:#e6f0fb;
+}
+*{box-sizing:border-box}
+html{font-size:20px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6}
+header.top{background:var(--green-d);color:#fff;padding:14px 20px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+header.top h1{font-size:1.15rem;margin:0;font-weight:700;line-height:1.3;flex:1 1 320px}
+.score-pill{background:#fff;color:var(--green-d);border-radius:999px;padding:6px 18px;font-weight:800;font-size:1.05rem;white-space:nowrap}
+.stepper{display:flex;flex-wrap:wrap;gap:8px;max-width:1100px;margin:16px auto 0;padding:0 16px}
+.stepper button{font:inherit;font-size:.82rem;font-weight:600;padding:8px 12px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.stepper button.cur{background:var(--green);border-color:var(--green);color:#fff}
+.stepper button.done{border-color:var(--green)}
+.stepper .b{display:inline-block;margin-left:6px;font-size:.78rem;background:var(--green-l);color:var(--green-d);border-radius:8px;padding:0 6px}
+.stepper button.cur .b{background:#fff}
+main{max-width:1100px;margin:16px auto 40px;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 30px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:1.7rem;line-height:1.25;margin:0 0 14px;color:var(--green-d)}
+h3{font-size:1.3rem;margin:22px 0 8px;color:var(--green-d)}
+p{margin:.5em 0}
+.lead{font-size:1.1rem}
+.formula{background:var(--green-l);border-left:6px solid var(--green);border-radius:10px;padding:12px 18px;margin:12px 0;font-size:1.15rem;font-weight:600;overflow-x:auto}
+.formula.small{font-weight:500;font-size:1.05rem}
+.hint{background:var(--amber-l);border-left:6px solid #e0a000;border-radius:10px;padding:12px 18px;margin:14px 0;font-size:.95rem}
+.hint b.t{color:var(--amber)}
+.note{background:var(--blue-l);border-left:6px solid var(--blue);border-radius:10px;padding:12px 18px;margin:14px 0;font-size:.95rem}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:var(--green-l)}
+td.c,th.c{text-align:center}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 4px;line-height:1.25}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+.ex{border:2px solid var(--line);border-radius:14px;padding:16px 22px;margin:18px 0}
+.ex h3{margin-top:0}
+.ex .given{background:#f6f8f6;border-radius:8px;padding:8px 14px;margin:8px 0}
+.ex ol{margin:6px 0 6px 0;padding-left:28px}
+.ex li{margin:6px 0}
+.ans{font-weight:800;color:var(--green-d);background:var(--green-l);padding:8px 14px;border-radius:8px;margin-top:10px}
+label.f{display:block;font-weight:700;margin:14px 0 6px}
+input[type=text],textarea,select{font:inherit;font-size:1.05rem;padding:10px 14px;border:2px solid #9db39f;border-radius:10px;width:100%;background:#fff;color:var(--ink)}
+input[type=text]:focus,textarea:focus{outline:3px solid #8fd1a9;border-color:var(--green)}
+textarea{min-height:130px;resize:vertical}
+.row3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.err{border-color:var(--red)!important}
+.ansrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.ansrow .lab{font-weight:700;min-width:210px;font-size:1.05rem}
+.ansrow input{width:190px}
+.ansrow .unit{font-weight:700}
+.st{font-weight:700;padding:3px 12px;border-radius:8px;font-size:.9rem}
+.st.ok{background:var(--green-l);color:var(--green-d)} .st.bad{background:var(--red-l);color:var(--red)}
+button.btn{font:inherit;font-weight:700;font-size:1rem;padding:12px 24px;border-radius:12px;border:none;background:var(--green);color:#fff;cursor:pointer}
+button.btn:hover{background:var(--green-d)}
+button.btn.sec{background:#fff;color:var(--green-d);border:2px solid var(--green)}
+button.btn.sec:hover{background:var(--green-l)}
+button.btn.red{background:var(--red)}
+button.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:6px}
+.drop{border:3px dashed #9db39f;border-radius:14px;padding:20px;text-align:center;background:#fafcf9}
+.drop.over{background:var(--green-l);border-color:var(--green)}
+.drop img{max-width:100%;max-height:420px;border-radius:8px;border:1px solid var(--line)}
+.small{font-size:.85rem;color:var(--muted)}
+.pts{float:right;background:var(--green-l);color:var(--green-d);font-weight:800;border-radius:10px;padding:4px 14px;font-size:.95rem}
+.cond{font-size:1.1rem;background:#f9fbf8;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:10px 0}
+.big{font-size:2.4rem;font-weight:800;color:var(--green-d)}
+.overlay{position:fixed;inset:0;background:rgba(10,30,18,.6);z-index:50;overflow:auto;padding:20px}
+.panel{background:#fff;max-width:1200px;margin:0 auto;border-radius:16px;padding:24px 28px}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tabs button{font:inherit;font-weight:700;padding:10px 18px;border-radius:10px;border:2px solid var(--green);background:#fff;cursor:pointer;color:var(--green-d)}
+.tabs button.cur{background:var(--green);color:#fff}
+tr.sel{background:var(--green-l)}
+.clk{cursor:pointer}
+.shot{max-width:100%;border:1px solid var(--line);border-radius:8px;margin:6px 0}
+footer{max-width:1100px;margin:0 auto 30px;padding:0 16px;text-align:right}
+footer button{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;font-size:.8rem}
+@media (max-width:640px){html{font-size:18px}.card{padding:18px 16px}.ansrow .lab{min-width:100%}}
+@media print{header.top .score-pill{border:1px solid #000}.stepper,.nav,.btnrow,footer{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}}
+label.chk{display:flex;gap:14px;align-items:flex-start;margin:12px 0;font-size:1rem;cursor:pointer;line-height:1.45}label.chk input{width:28px;height:28px;flex:none;margin-top:1px;accent-color:var(--green)}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Розв’язування задач на тему «Фотосинтез і хемосинтез»</h1>
+  <div class="score-pill" id="scorePill">Бали: 0 / 12</div>
+</header>
+<div class="stepper" id="stepper"></div>
+<main id="main"></main>
+<footer><button onclick="Teacher.open()">Для вчителя</button></footer>
+<div id="teacherRoot"></div>
+
+<script>
+/* ============ НАЛАШТУВАННЯ ДЛЯ ВЧИТЕЛЯ ============ */
+const CFG = {
+  TEACHER_PASSWORD: 'teacher2026',   // змініть пароль доступу до відповідей та результатів
+  TEACHER_EMAIL: '',                 // за потреби: e-mail вчителя (з'явиться кнопка «Надіслати листом»)
+  MAX_ATT: 2,                        // кількість спроб на кожну задачу
+  STORE: 'fotosyntez_praktychna_v2'
+};
+// 5 задач × 2 бали + висновок 2 бали = 12 балів
+const MAXTOTAL = 12;
+
+/* ============ ЗАДАЧІ ============ */
+const EQ_PH = '6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂';
+const TASKS = [
+ {
+  text:'Розрахуйте, скільки кілограмів глюкози синтезовано рослинами під час фотосинтезу, якщо відомо, що при цьому виділилося 22 400 літрів кисню.',
+  fields:[{id:'a',label:'m(C₆H₁₂O₆) =',unit:'кг',ref:30,tol:.02,weight:1}],
+  sol:'<ol><li>n(O₂) = V : V<sub>m</sub> = 22 400 : 22,4 = 1000 моль.</li><li>За рівнянням n(C₆H₁₂O₆) : n(O₂) = 1 : 6, тому n(C₆H₁₂O₆) = 1000 : 6 = 166,7 моль.</li><li>m(C₆H₁₂O₆) = 166,7 · 180 = 30 000 г = <b>30 кг</b>.</li></ol>'
+ },
+ {
+  text:'За добу людина споживає в середньому 430 г O₂. Одне дерево середніх розмірів за вегетаційний період поглинає близько 42 кг CO₂. На скільки діб вистачить людині кисню, продукованого одним деревом за вегетаційний період? Скільки дерев має припадати на одну людину, щоб забезпечити її киснем протягом року?',
+  fields:[
+    {id:'a',label:'Кисню вистачить на',unit:'діб',ref:71,tol:.015,weight:.5},
+    {id:'b',label:'Дерев на одну людину',unit:'шт.',ref:5.14,tol:.02,alt:[5,6],weight:.5}
+  ],
+  sol:'<ol><li>m(CO₂) = 42 000 г; n(CO₂) = 42 000 : 44 = 954,5 моль.</li><li>n(O₂) = n(CO₂) = 954,5 моль; m(O₂) = 954,5 · 32 ≈ 30 545 г ≈ 30,5 кг.</li><li>Діб: 30 545 : 430 ≈ <b>71 доба</b>.</li><li>Дерев на рік: 365 : 71 ≈ <b>5,1</b> (практично 5–6 дерев). Перевірка: 430 · 365 = 156 950 г; 156 950 : 30 545 ≈ 5,14.</li></ol>'
+ },
+ {
+  text:'У процесі фотосинтезу за один світловий день (12 годин) рослина помідора вбирає 132 г CO₂. Яка маса глюкози і кисню (теоретично) може утворитися в її листках протягом 10 днів? Яка продуктивність фотосинтезу у помідора, якщо площа листкової пластинки дорівнює 1 м²?',
+  fields:[
+    {id:'a',label:'m(C₆H₁₂O₆) за 10 днів =',unit:'г',ref:900,tol:.02,weight:1/3},
+    {id:'b',label:'m(O₂) за 10 днів =',unit:'г',ref:960,tol:.02,weight:1/3},
+    {id:'c',label:'Продуктивність',unit:'г/(м²·год)',ref:7.5,tol:.02,weight:1/3}
+  ],
+  sol:'<ol><li>За 1 день: n(CO₂) = 132 : 44 = 3 моль. За 10 днів: 30 моль.</li><li>n(C₆H₁₂O₆) = 30 : 6 = 5 моль; m = 5 · 180 = <b>900 г</b>.</li><li>n(O₂) = n(CO₂) = 30 моль; m(O₂) = 30 · 32 = <b>960 г</b>.</li><li>За 1 день (12 год) утворюється 3 : 6 = 0,5 моль = 90 г глюкози; продуктивність: 90 : 12 = <b>7,5 г/(м²·год)</b>.</li></ol>'
+ },
+ {
+  text:'Визначте, яку кількість речовини аміаку повинні окислити нітрифікуючі бактерії для синтезу 360 г глюкози, якщо для синтезу 1 моль глюкози використовується близько 12 600 кДж енергії.',
+  fields:[{id:'a',label:'n(NH₃) =',unit:'моль',ref:79.4,tol:.02,weight:1}],
+  sol:'<ol><li>n(C₆H₁₂O₆) = 360 : 180 = 2 моль.</li><li>Потрібна енергія: Q = 2 · 12 600 = 25 200 кДж.</li><li>Окислення 2 моль NH₃ дає 635 кДж. Складаємо пропорцію: 2 моль — 635 кДж; x моль — 25 200 кДж.</li><li>x = 2 · 25 200 : 635 ≈ <b>79,4 моль</b>.</li></ol>'
+ },
+ {
+  text:'У результаті діяльності залізобактерій на дні болота відклалося 1500 т залізної руди. Скільки тепла виділилось залізобактеріями в навколишнє середовище, якщо вуглекислого газу було достатньо, а коефіцієнт використання енергії становить 0,22 (22 %)? Яка кількість речовини вуглеводів синтезована бактеріями?',
+  fields:[
+    {id:'a',label:'Тепла виділено в середовище',unit:'· 10⁸ кДж',ref:8.86,tol:.02,weight:.5},
+    {id:'b',label:'n(вуглеводів) =',unit:'· 10⁴ моль',ref:1.98,tol:.02,weight:.5}
+  ],
+  sol:'<ol><li>n(Fe(OH)₃) = 1,5·10⁹ г : 107 г/моль ≈ 1,40·10⁷ моль.</li><li>Загальна енергія реакції: на 4 моль Fe(OH)₃ — 324 кДж, отже Q = 1,40·10⁷ : 4 · 324 ≈ 1,136·10⁹ кДж.</li><li>Корисно використано 22 %: 0,22 · 1,136·10⁹ ≈ 2,50·10⁸ кДж. У середовище виділено решту 78 %: 0,78 · 1,136·10⁹ ≈ <b>8,86·10⁸ кДж</b>.</li><li>n(вуглеводів) = 2,50·10⁸ : 12 600 ≈ <b>1,98·10⁴ моль</b> (≈ 19 800 моль).</li></ol>'
+ }
+];
+
+/* ============ СТОРІНКИ ============ */
+const PAGES = [{k:'start',l:'Початок'},{k:'crit',l:'Критерії'},{k:'theory',l:'Теорія'},{k:'examples',l:'Приклади'}]
+  .concat(TASKS.map((t,i)=>({k:'t'+i,l:'Задача '+(i+1),t:i})))
+  .concat([{k:'concl',l:'Висновок'},{k:'result',l:'Результат'}]);
+const FIRST_TASK_PAGE = 4;
+
+/* критерії письмової частини (самооцінка учня + перевірка вчителя) */
+const WR = [
+  {t:'Умову записано: «Дано» і «Знайти» (позначення, числові значення, одиниці виміру)', w:.25},
+  {t:'Записано рівняння реакції з розставленими коефіцієнтами', w:.25},
+  {t:'Хід розв’язання: формули (n = m : M, n = V : V<sub>m</sub>), співвідношення за рівнянням, обчислення з одиницями, записана відповідь', w:.5}
+];
+const CR = [
+  {t:'Висновок відповідає меті роботи: сказано, які навички закріплено', w:.5},
+  {t:'Розкрито суть фотосинтезу й хемосинтезу: джерело енергії, вихідні та кінцеві речовини', w:.5},
+  {t:'Висновок підтверджено числами та результатами розв’язаних задач', w:.5},
+  {t:'Названо значення цих процесів для природи й людини; оцінено власну роботу (що вдалося, що було важким)', w:.5}
+];
+const CONCL_MIN = 40;
+
+/* ============ СТАН ============ */
+function fresh(){
+  return {student:{surname:'',name:'',cls:''},page:0,startedAt:null,finishedAt:null,
+    tasks:TASKS.map(t=>({att:0,f:Object.fromEntries(t.fields.map(f=>[f.id,{v:'',ok:false,att:0,wrong:false}])),shot:null,chk:[0,0,0]})),
+    concl:{text:'',chk:[0,0,0,0]}};
+}
+let S = load() || fresh();
+let notice = '';
+function load(){try{const r=localStorage.getItem(CFG.STORE);if(!r)return null;const o=JSON.parse(r);if(o&&o.tasks&&o.tasks.length===TASKS.length&&o.concl&&o.tasks[0].chk)return o}catch(e){}return null}
+function save(){
+  try{localStorage.setItem(CFG.STORE,JSON.stringify(S))}
+  catch(e){try{const c=JSON.parse(JSON.stringify(S));c.tasks.forEach(t=>t.shot=null);localStorage.setItem(CFG.STORE,JSON.stringify(c))}catch(e2){}}
+}
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n=>String(Math.round(n*100)/100).replace('.',',');
+const words = s=>(String(s||'').trim().match(/\S+/g)||[]).length;
+const isSet = v=>v!==undefined&&v!==null&&v!=='';
+
+function parseNum(v){const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isNaN(n)?null:n}
+function isCorrect(f,v){
+  const n=parseNum(v); if(n===null)return false;
+  if(f.alt&&f.alt.indexOf(n)>=0)return true;
+  return Math.abs(n-f.ref)<=Math.abs(f.ref)*f.tol;
+}
+function wrAuto(s){let w=0;if(s.shot)WR.forEach((c,k)=>{if(s.chk[k])w+=c.w});return w}
+function taskScore(i,st){
+  st=st||S; const t=TASKS[i], s=st.tasks[i]; let a=0;
+  t.fields.forEach(f=>{const x=s.f[f.id]; if(x&&x.ok) a+=f.weight*(x.att===1?1:.5)});
+  let wr=wrAuto(s); if(st.tadj&&isSet(st.tadj[i]))wr=Number(st.tadj[i]);
+  return {a:a,wr:wr,total:a+wr};
+}
+function conclAuto(st){let c=0;if(words(st.concl.text)>=CONCL_MIN)CR.forEach((x,k)=>{if(st.concl.chk[k])c+=x.w});return c}
+function conclScore(st){st=st||S;return isSet(st.cadj)?Number(st.cadj):conclAuto(st)}
+function totalScore(st){let t=conclScore(st);TASKS.forEach((_,i)=>t+=taskScore(i,st).total);return t}
+function level(g){return g>=10?'високий рівень':g>=7?'достатній рівень':g>=4?'середній рівень':'початковий рівень'}
+function studentOk(){const s=S.student;return s.surname.trim()&&s.name.trim()&&s.cls.trim()}
+
+/* ============ НАВІГАЦІЯ ============ */
+function go(p){
+  if(p>=FIRST_TASK_PAGE && !studentOk()){notice='Спочатку введіть прізвище, ім’я та клас.';p=0}
+  else notice='';
+  if(p>FIRST_TASK_PAGE-1 && !S.startedAt){S.startedAt=new Date().toISOString()}
+  S.page=p; save(); render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateScore(){
+  $('scorePill').textContent='Бали: '+fmt(totalScore())+' / '+MAXTOTAL;
+  renderStepper();
+}
+function renderStepper(){
+  $('stepper').innerHTML=PAGES.map((p,i)=>{
+    let b='',cls='';
+    if(p.t!==undefined){const sc=taskScore(p.t);b='<span class="b">'+fmt(sc.total)+'</span>';if(sc.total>=1.99)cls=' done'}
+    if(p.k==='concl'){const c=conclScore();b='<span class="b">'+fmt(c)+'</span>';if(c>=1.99)cls=' done'}
+    return '<button class="'+(i===S.page?'cur':'')+cls+'" onclick="go('+i+')">'+esc(p.l)+b+'</button>';
+  }).join('');
+}
+function navBar(i){
+  return '<div class="nav"><div>'+(i>0?'<button class="btn sec" onclick="go('+(i-1)+')">← Назад</button>':'')+'</div><div>'+
+    (i<PAGES.length-1?'<button class="btn" onclick="go('+(i+1)+')">Далі →</button>':'')+'</div></div>';
+}
+
+/* ============ РЕНДЕР СТОРІНОК ============ */
+function render(){
+  const p=PAGES[S.page]; let h='';
+  if(p.k==='start')h=pStart(); else if(p.k==='crit')h=pCrit(); else if(p.k==='theory')h=pTheory();
+  else if(p.k==='examples')h=pExamples(); else if(p.k==='concl')h=pConcl(); else if(p.k==='result')h=pResult(); else h=pTask(p.t);
+  $('main').innerHTML=h+navBar(S.page);
+  updateScore();
+}
+
+function pStart(){
+  const s=S.student;
+  return '<div class="card"><h2>Інструктивна картка</h2>'+
+  '<p class="lead"><b>Тема:</b> Розв’язування задач на тему «Фотосинтез і хемосинтез».</p>'+
+  '<p class="lead"><b>Мета:</b> удосконалити навички розв’язування задач з теми «Фотосинтез і хемосинтез».</p>'+
+  '<p class="lead"><b>Обладнання й матеріали:</b> підручник, зошит, ручка, телефон або комп’ютер (для фото розв’язання).</p>'+
+  '<h3>Хід роботи</h3><ol>'+
+  '<li>Введіть прізвище, ім’я та клас (внизу цієї сторінки).</li>'+
+  '<li>Ознайомтеся з критеріями оцінювання (сторінка «Критерії»).</li>'+
+  '<li>Прочитайте теорію та розгляньте приклади розв’язання задач.</li>'+
+  '<li>Розв’яжіть задачі 1–5 <b>у зошиті</b>. Оформлюйте їх так, як показано нижче.</li>'+
+  '<li>На сторінці кожної задачі: уведіть відповідь і натисніть «Перевірити» (<b>'+CFG.MAX_ATT+' спроби</b>); додайте <b>скриншот або фото</b> розв’язання із зошита; позначте критерії самооцінки, яким відповідає ваш запис.</li>'+
+  '<li>На сторінці «Висновок» напишіть <b>один загальний висновок</b> до всієї роботи.</li>'+
+  '<li>На сторінці «Результат» перегляньте бали, натисніть «Завершити та зберегти файл» і надішліть файл учителю.</li></ol>'+
+  '<h3>Як оформити розв’язання задачі в зошиті</h3>'+
+  '<div class="formula small" style="font-weight:500;line-height:1.8"><b>Дано:</b> усі величини з умови з позначеннями й одиницями.<br><b>Знайти:</b> що саме потрібно обчислити.<br><b>Розв’язання:</b><br>&nbsp;1) рівняння реакції з коефіцієнтами;<br>&nbsp;2) кількість відомої речовини: n = m : M або n = V : V<sub>m</sub>;<br>&nbsp;3) співвідношення кількостей речовин за рівнянням (пропорція);<br>&nbsp;4) обчислення шуканої маси, об’єму, енергії тощо.<br><b>Відповідь:</b> число й одиниці виміру.</div>'+
+  '<div class="note">Бали за письмову частину нараховуються, коли додано скриншот розв’язання. Учитель перевіряє ваш запис у зошиті й може змінити самооцінку.</div></div>'+
+  '<div class="card"><h2>Дані учня</h2>'+(notice?'<div class="hint"><b class="t">'+esc(notice)+'</b></div>':'')+
+  '<div class="row3"><div><label class="f" for="sn">Прізвище</label><input type="text" id="sn" data-st="surname" autocomplete="family-name" value="'+esc(s.surname)+'"></div>'+
+  '<div><label class="f" for="nm">Ім’я</label><input type="text" id="nm" data-st="name" autocomplete="given-name" value="'+esc(s.name)+'"></div>'+
+  '<div><label class="f" for="cl">Клас</label><input type="text" id="cl" data-st="cls" placeholder="наприклад, 10-А" value="'+esc(s.cls)+'"></div></div>'+
+  '<div class="btnrow"><button class="btn" onclick="startWork()">Розпочати роботу →</button></div></div>';
+}
+function startWork(){ if(!studentOk()){notice='Заповніть усі три поля: прізвище, ім’я та клас.';render();return} go(1) }
+
+function pCrit(){
+  const wrSum=WR.reduce((a,c)=>a+c.w,0), per=1+wrSum;
+  let h='<div class="card"><h2>Критерії оцінювання</h2><p>Максимальна кількість балів — <b>'+MAXTOTAL+'</b>: п’ять задач по <b>'+fmt(per)+'</b> бала і висновок — <b>'+fmt(CR.reduce((a,c)=>a+c.w,0))+'</b> бала. Бали підраховуються автоматично; вчитель перевіряє письмову частину й може її скоригувати.</p>'+
+  '<h3>А. Кожна задача (по '+fmt(per)+' б.)</h3><table><tr><th>Критерій</th><th class="c">Балів</th><th>Що перевіряється</th></tr>'+
+  '<tr><td><b>1. Правильна відповідь</b><br><span class="small">оцінюється автоматично</span></td><td class="c">1</td><td>Числова відповідь збігається з еталоном. З <b>1-ї спроби</b> — повний бал, з <b>2-ї</b> — половина. Якщо в задачі кілька відповідей, бал ділиться між ними порівну.</td></tr>';
+  const desc=['Записано всі дані з умови та шукані величини; є позначення й одиниці виміру.','Формули речовин правильні, коефіцієнти розставлено; використано потрібне рівняння (фотосинтезу чи хемосинтезу).','Використано формули n = m : M, n = V : V<sub>m</sub>, співвідношення за рівнянням, пропорцію; обчислення послідовні й без пропущених кроків; у відповіді є одиниці виміру.'];
+  WR.forEach((c,k)=>{h+='<tr><td><b>'+(k+2)+'. '+['Запис умови','Рівняння реакції','Хід розв’язання і відповідь у зошиті'][k]+'</b><br><span class="small">самооцінка + перевірка вчителя</span></td><td class="c">'+fmt(c.w)+'</td><td>'+desc[k]+'</td></tr>'});
+  h+='<tr><th>Разом за задачу</th><th class="c">'+fmt(per)+'</th><th></th></tr></table>'+
+  '<h3>Б. Висновок до роботи (один, '+fmt(CR.reduce((a,c)=>a+c.w,0))+' б.)</h3><p>Висновок має містити не менше <b>'+CONCL_MIN+' слів</b>. Кожен критерій — по 0,5 бала:</p><table><tr><th>№</th><th>Критерій</th><th class="c">Балів</th></tr>'+
+  CR.map((c,k)=>'<tr><td>'+(k+1)+'</td><td>'+c.t+'</td><td class="c">'+fmt(c.w)+'</td></tr>').join('')+'</table>'+
+  '<h3>В. Підсумок</h3><table><tr><th>Бали</th><th>Рівень</th></tr><tr><td>1 – 3</td><td>початковий</td></tr><tr><td>4 – 6</td><td>середній</td></tr><tr><td>7 – 9</td><td>достатній</td></tr><tr><td>10 – 12</td><td>високий</td></tr></table>'+
+  '<div class="note">Оцінка за 12-бальною шкалою — це сума балів, округлена до цілого.</div></div>';
+  return h;
+}
+
+function pTheory(){
+  return '<div class="card"><h2>Теорія: фотосинтез</h2>'+
+  '<p class="lead"><b>Фотосинтез</b> — процес утворення органічних речовин із вуглекислого газу та води за участі енергії світла й пігменту хлорофілу. Відбувається в хлоропластах рослин, ціанобактерій, водоростей.</p>'+
+  '<div class="formula">6CO₂ + 6H₂O <span style="font-weight:400">——світло, хлорофіл→</span> C₆H₁₂O₆ + 6O₂</div>'+
+  '<p>Співвідношення кількостей речовин: <b>n(CO₂) : n(H₂O) : n(C₆H₁₂O₆) : n(O₂) = 6 : 6 : 1 : 6</b>.</p>'+
+  '<table><tr><th>Фаза</th><th>Де відбувається</th><th>Що відбувається</th></tr>'+
+  '<tr><td><b>Світлова</b></td><td>тилакоїди гран</td><td>поглинання світла хлорофілом; фотоліз води 2H₂O → 4H⁺ + 4e⁻ + O₂↑; синтез АТФ і НАДФ·Н₂</td></tr>'+
+  '<tr><td><b>Темнова</b></td><td>строма хлоропластів</td><td>фіксація CO₂ (цикл Кальвіна), відновлення до глюкози за рахунок АТФ і НАДФ·Н₂</td></tr></table></div>'+
+
+  '<div class="card"><h2>Теорія: хемосинтез</h2>'+
+  '<p class="lead"><b>Хемосинтез</b> — синтез органічних речовин з CO₂ та H₂O за рахунок енергії, що виділяється під час окиснення неорганічних сполук (NH₃, H₂S, Fe²⁺, H₂). Відкрив його <b>С. М. Виноградський</b> у 1887 р. Хемосинтезуючі бактерії — автотрофи, світло їм не потрібне.</p>'+
+  '<p>Хемосинтез має <b>дві стадії</b>: 1) окиснення неорганічної речовини з виділенням енергії; 2) використання цієї енергії для синтезу глюкози з CO₂ та H₂O (так само, як у темновій фазі фотосинтезу).</p>'+
+  '<table><tr><th>Бактерії</th><th>Реакція окиснення</th></tr>'+
+  '<tr><td>Нітрифікуючі</td><td>2NH₃ + 3O₂ → 2HNO₂ + 2H₂O + 635 кДж<br>2HNO₂ + O₂ → 2HNO₃ + 151 кДж</td></tr>'+
+  '<tr><td>Залізобактерії</td><td>4FeCO₃ + O₂ + 6H₂O → 4Fe(OH)₃ + 4CO₂ + 324 кДж</td></tr>'+
+  '<tr><td>Сіркобактерії</td><td>2H₂S + O₂ → 2S + 2H₂O + 272 кДж<br>2S + 3O₂ + 2H₂O → 2H₂SO₄ + 636 кДж</td></tr>'+
+  '<tr><td>Водневі бактерії</td><td>2H₂ + O₂ → 2H₂O + Q</td></tr></table>'+
+  '<div class="note">Значення: нітрифікуючі бактерії збагачують ґрунт нітратами; залізобактерії утворюють болотні руди; сіркобактерії беруть участь у колообігу сірки.</div></div>'+
+
+  '<div class="card"><h2>Формули для розрахунків</h2>'+
+  '<div class="formula small">Кількість речовини:&nbsp; n = <span class="frac"><span>m</span><span>M</span></span> &nbsp;(моль)&emsp;|&emsp;n = <span class="frac"><span>V</span><span>V<sub>m</sub></span></span>&emsp;(V<sub>m</sub> = 22,4 л/моль, н. у.)</div>'+
+  '<div class="formula small">Маса й об’єм:&nbsp; m = n · M&emsp;|&emsp;V = n · V<sub>m</sub></div>'+
+  '<div class="formula small">Енергія за рівнянням:&nbsp; Q = <span class="frac"><span>n · Q<sub>рівняння</sub></span><span>ν</span></span>&emsp;(ν — коефіцієнт перед речовиною в рівнянні)</div>'+
+  '<div class="formula small">Коефіцієнт використання енергії:&nbsp; η = <span class="frac"><span>Q<sub>корисна</sub></span><span>Q<sub>загальна</sub></span></span> · 100 %&emsp;|&emsp;Q<sub>втрат</sub> = Q<sub>загальна</sub> · (1 − η)</div>'+
+  '<div class="formula small">Продуктивність фотосинтезу:&nbsp; P = <span class="frac"><span>m(глюкози)</span><span>S · t</span></span>&emsp;(г/(м²·год))</div>'+
+  '<h3>Молярні маси</h3><table><tr><th>Речовина</th><th class="c">CO₂</th><th class="c">O₂</th><th class="c">H₂O</th><th class="c">C₆H₁₂O₆</th><th class="c">NH₃</th><th class="c">H₂S</th><th class="c">Fe(OH)₃</th></tr>'+
+  '<tr><td>M, г/моль</td><td class="c">44</td><td class="c">32</td><td class="c">18</td><td class="c">180</td><td class="c">17</td><td class="c">34</td><td class="c">107</td></tr></table>'+
+  '<h3>Додаткові дані для розрахунків</h3><ul><li>Для синтезу 1 моль глюкози (вуглеводів) під час хемосинтезу потрібно близько 12 600 кДж енергії.</li><li>Залізна руда, яку відкладають залізобактерії, — Fe(OH)₃ (M = 107 г/моль); 1 т = 10⁶ г.</li><li>У році 365 діб.</li><li>Продуктивність фотосинтезу — маса глюкози, що синтезується за 1 годину на 1 м² листкової поверхні.</li></ul>'+
+  '<h3>Алгоритм розв’язування</h3><ol><li>Запишіть коротку умову («Дано», «Знайти»).</li><li>Запишіть рівняння реакції та розставте коефіцієнти.</li><li>Знайдіть кількість відомої речовини (n = m : M або n = V : V<sub>m</sub>).</li><li>За коефіцієнтами рівняння знайдіть кількість шуканої речовини.</li><li>Обчисліть масу, об’єм або енергію; запишіть відповідь з одиницями.</li></ol></div>';
+}
+
+function pExamples(){
+  return '<div class="card"><h2>Приклади розв’язання задач</h2>'+
+  '<div class="ex"><h3>Приклад 1</h3><p>Рослина поглинула 88 г вуглекислого газу. Обчисліть масу глюкози, що утворилася, та об’єм кисню (н. у.), що виділився.</p>'+
+  '<div class="given"><b>Дано:</b> m(CO₂) = 88 г.&emsp;<b>Знайти:</b> m(C₆H₁₂O₆) — ?; V(O₂) — ?</div>'+
+  '<ol><li>Рівняння: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂.</li><li>n(CO₂) = 88 : 44 = 2 моль.</li><li>n(C₆H₁₂O₆) = 2 : 6 = 0,333 моль; n(O₂) = n(CO₂) = 2 моль.</li><li>m(C₆H₁₂O₆) = 0,333 · 180 = 60 г; V(O₂) = 2 · 22,4 = 44,8 л.</li></ol><div class="ans">Відповідь: 60 г глюкози; 44,8 л кисню.</div></div>'+
+  '<div class="ex"><h3>Приклад 2</h3><p>Скільки літрів вуглекислого газу (н. у.) потрібно для синтезу 90 г глюкози? Яка маса кисню при цьому виділиться?</p>'+
+  '<div class="given"><b>Дано:</b> m(C₆H₁₂O₆) = 90 г.&emsp;<b>Знайти:</b> V(CO₂) — ?; m(O₂) — ?</div>'+
+  '<ol><li>Рівняння: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂.</li><li>n(C₆H₁₂O₆) = 90 : 180 = 0,5 моль.</li><li>n(CO₂) = n(O₂) = 6 · 0,5 = 3 моль.</li><li>V(CO₂) = 3 · 22,4 = 67,2 л; m(O₂) = 3 · 32 = 96 г.</li></ol><div class="ans">Відповідь: 67,2 л CO₂; 96 г O₂.</div></div>'+
+  '<div class="ex"><h3>Приклад 3</h3><p>Сіркобактерії окислили 170 г сірководню за рівнянням 2H₂S + O₂ → 2S + 2H₂O + 272 кДж. Коефіцієнт використання енергії — 30 %. Скільки енергії виділилося, скільки її втрачено і скільки глюкози синтезовано, якщо на 1 моль глюкози потрібно 12 600 кДж?</p>'+
+  '<div class="given"><b>Дано:</b> m(H₂S) = 170 г; η = 0,3.&emsp;<b>Знайти:</b> Q<sub>заг</sub>, Q<sub>втрат</sub>, m(C₆H₁₂O₆).</div>'+
+  '<ol><li>n(H₂S) = 170 : 34 = 5 моль.</li><li>За рівнянням 2 моль H₂S дають 272 кДж, тому Q<sub>заг</sub> = 5 : 2 · 272 = 680 кДж.</li><li>Корисна енергія: Q<sub>кор</sub> = 0,3 · 680 = 204 кДж; втрати: 680 − 204 = 476 кДж.</li><li>n(C₆H₁₂O₆) = 204 : 12 600 = 0,0162 моль; m = 0,0162 · 180 ≈ 2,9 г.</li></ol><div class="ans">Відповідь: виділилося 680 кДж; втрачено 476 кДж; синтезовано ≈ 2,9 г глюкози.</div></div>'+
+  '</div>';
+}
+
+function chkBox(attr,checked,text,w){
+  return '<label class="chk"><input type="checkbox" '+attr+(checked?' checked':'')+'><span>'+text+' <b>(+'+fmt(w)+' б.)</b></span></label>';
+}
+function pTask(i){
+  const t=TASKS[i], s=S.tasks[i], locked=s.att>=CFG.MAX_ATT, sc=taskScore(i);
+  const allOk=t.fields.every(f=>s.f[f.id].ok), done=allOk||locked;
+  let h='<div class="card"><span class="pts" id="apts'+i+'">Відповідь: '+fmt(sc.a)+' / 1 б.</span><h2>Задача '+(i+1)+'</h2>'+
+    '<div class="cond">'+esc(t.text)+'</div>'+
+    '<h3>1. Відповідь</h3><p class="small">Розв’яжіть задачу в зошиті, потім уведіть відповідь (десяткові дроби — через кому або крапку; округлюйте до десятих чи сотих, діб — до цілого).</p>';
+  t.fields.forEach(f=>{
+    const x=s.f[f.id], dis=x.ok||locked;
+    let st='';
+    if(x.ok)st='<span class="st ok">✓ Правильно</span>';
+    else if(x.wrong)st='<span class="st bad">✗ Неправильно'+(locked?'':' — перевірте розрахунки')+'</span>';
+    h+='<div class="ansrow"><span class="lab">'+esc(f.label)+'</span><input type="text" inputmode="decimal" data-t="'+i+'" data-f="'+f.id+'" value="'+esc(x.v)+'"'+(dis?' disabled':'')+'><span class="unit">'+esc(f.unit)+'</span>'+st+'</div>';
+  });
+  h+='<div class="btnrow"><button class="btn" onclick="checkTask('+i+')"'+(done?' disabled':'')+'>Перевірити</button>'+
+    '<span class="small" style="align-self:center">Використано спроб: '+s.att+' з '+CFG.MAX_ATT+(locked&&!allOk?' — спроби вичерпано':'')+'</span></div>'+
+    (notice?'<div class="hint"><b class="t">'+esc(notice)+'</b></div>':'')+
+    (locked&&!allOk?'<div class="note">Спроби вичерпано. Правильну відповідь покаже вчитель. Додайте розв’язання із зошита — за письмову частину бали також нараховуються.</div>':'')+
+    '</div>';
+  h+='<div class="card"><span class="pts" id="wpts'+i+'">Розв’язання: '+fmt(sc.wr)+' / '+fmt(WR.reduce((a,c)=>a+c.w,0))+' б.</span><h3 style="margin-top:0">2. Письмове розв’язання</h3>'+
+    '<p class="small">Додайте скриншот або фото розв’язання із зошита: «Дано», «Знайти», рівняння, обчислення, відповідь.</p>'+
+    '<div class="drop" id="drop'+i+'" data-drop="'+i+'">'+
+    (s.shot?'<img src="'+s.shot+'" alt="Скриншот розв’язання задачі '+(i+1)+'"><div class="btnrow" style="justify-content:center"><button class="btn sec" onclick="document.getElementById(\'file'+i+'\').click()">Замінити</button><button class="btn sec" style="color:var(--red);border-color:var(--red)" onclick="removeShot('+i+')">Видалити</button></div>'
+      :'<p style="margin:4px 0 10px"><b>Перетягніть зображення сюди</b>, натисніть Ctrl+V для вставки знімка або оберіть файл</p><button class="btn" onclick="document.getElementById(\'file'+i+'\').click()">Обрати файл / зробити фото</button>')+
+    '<input type="file" accept="image/*" id="file'+i+'" data-file="'+i+'" style="display:none"></div>'+
+    '<h3>Самооцінка: позначте, що є у вашому розв’язанні</h3>'+
+    WR.map((c,k)=>chkBox('data-chk="'+i+':'+k+'"',s.chk[k],c.t,c.w)).join('')+
+    (s.shot?'':'<div class="hint"><b class="t">Бали за самооцінку буде зараховано після додавання скриншота.</b></div>')+
+    '</div>';
+  return h;
+}
+function refreshPts(i){
+  const sc=taskScore(i);
+  const a=$('apts'+i); if(a)a.textContent='Відповідь: '+fmt(sc.a)+' / 1 б.';
+  const w=$('wpts'+i); if(w)w.textContent='Розв’язання: '+fmt(sc.wr)+' / '+fmt(WR.reduce((x,c)=>x+c.w,0))+' б.';
+  updateScore();
+}
+function checkTask(i){
+  const t=TASKS[i], s=S.tasks[i]; if(s.att>=CFG.MAX_ATT)return;
+  let any=false;
+  t.fields.forEach(f=>{const x=s.f[f.id]; if(!x.ok&&String(x.v).trim()!=='')any=true});
+  if(!any){notice='Спочатку введіть відповідь у поле.';render();return}
+  notice=''; s.att++;
+  t.fields.forEach(f=>{const x=s.f[f.id]; if(x.ok)return;
+    if(String(x.v).trim()==='')return;
+    if(isCorrect(f,x.v)){x.ok=true;x.att=s.att;x.wrong=false}else x.wrong=true});
+  save(); render();
+}
+
+function pConcl(){
+  const c=S.concl, n=words(c.text);
+  return '<div class="card"><span class="pts" id="cpts">'+fmt(conclScore())+' / '+fmt(CR.reduce((a,x)=>a+x.w,0))+' б.</span><h2>Висновок до роботи</h2>'+
+  '<p class="lead">Напишіть <b>один загальний висновок</b> до всієї практичної роботи (не менше '+CONCL_MIN+' слів).</p>'+
+  '<div class="hint"><b class="t">План висновку.</b><ol style="margin:6px 0 0"><li>Що ви закріпили або чого навчилися, розв’язуючи задачі.</li><li>У чому суть фотосинтезу й хемосинтезу: звідки береться енергія, які речовини вступають у реакцію й що утворюється.</li><li>Які результати ви отримали (наведіть 1–2 числові приклади з задач).</li><li>Яке значення ці процеси мають для природи й людини; що вдалося, а що було складним.</li></ol></div>'+
+  '<textarea data-cconcl="1" style="min-height:240px" placeholder="Мій висновок: …">'+esc(c.text)+'</textarea>'+
+  '<div class="small" id="cwc">Слів: '+n+' (потрібно щонайменше '+CONCL_MIN+')</div>'+
+  '<h3>Самооцінка: позначте, що є у вашому висновку</h3>'+
+  CR.map((x,k)=>chkBox('data-cc="'+k+'"',c.chk[k],x.t,x.w)).join('')+
+  '<div class="hint" id="cwarn" style="'+(n>=CONCL_MIN?'display:none':'')+'"><b class="t">Бали за висновок нараховуються, коли в ньому не менше '+CONCL_MIN+' слів.</b></div></div>';
+}
+function refreshConcl(){
+  const n=words(S.concl.text);
+  $('cwc').textContent='Слів: '+n+' (потрібно щонайменше '+CONCL_MIN+')';
+  $('cwarn').style.display=n>=CONCL_MIN?'none':'';
+  $('cpts').textContent=fmt(conclScore())+' / '+fmt(CR.reduce((a,x)=>a+x.w,0))+' б.';
+  updateScore();
+}
+
+/* зображення */
+function readImg(file,cb){
+  if(!file||!/^image\//.test(file.type))return;
+  const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    const m=1100;let w=im.width,h=im.height;if(w>m){h=Math.round(h*m/w);w=m}
+    const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');
+    g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(im,0,0,w,h);cb(c.toDataURL('image/jpeg',.72))};
+    im.src=r.result};
+  r.readAsDataURL(file);
+}
+function setShot(i,d){S.tasks[i].shot=d;save();render()}
+function removeShot(i){S.tasks[i].shot=null;save();render()}
+function curTask(){const p=PAGES[S.page];return p.t}
+
+/* ============ РЕЗУЛЬТАТ ============ */
+function pResult(){
+  const tot=totalScore(), g=Math.round(tot);
+  let rows='';
+  TASKS.forEach((t,i)=>{const sc=taskScore(i);
+    rows+='<tr><td>Задача '+(i+1)+'</td><td class="c">'+fmt(sc.a)+' / 1</td><td class="c">'+fmt(sc.wr)+' / 1</td><td class="c"><b>'+fmt(sc.total)+'</b> / 2</td></tr>'});
+  rows+='<tr><td>Висновок до роботи</td><td class="c">—</td><td class="c">—</td><td class="c"><b>'+fmt(conclScore())+'</b> / 2</td></tr>';
+  const miss=[];
+  TASKS.forEach((t,i)=>{const s=S.tasks[i];
+    if(!t.fields.every(f=>s.f[f.id].ok)&&s.att<CFG.MAX_ATT)miss.push('задача '+(i+1)+': відповідь не підтверджено');
+    if(!s.shot)miss.push('задача '+(i+1)+': немає скриншота розв’язання')});
+  if(words(S.concl.text)<CONCL_MIN)miss.push('висновок коротший за '+CONCL_MIN+' слів');
+  const fin=!!S.finishedAt;
+  return '<div class="card"><h2>Результат</h2><p class="lead"><b>'+esc(S.student.surname)+' '+esc(S.student.name)+'</b>, '+esc(S.student.cls)+' клас</p>'+
+  '<table><tr><th>Завдання</th><th class="c">Відповідь</th><th class="c">Письмове розв’язання</th><th class="c">Разом</th></tr>'+rows+
+  '<tr><th>Всього</th><th></th><th></th><th class="c">'+fmt(tot)+' / '+MAXTOTAL+'</th></tr></table>'+
+  '<p>Оцінка за 12-бальною шкалою: <span class="big">'+g+'</span> — '+level(g)+'.</p>'+
+  '<p class="small">Письмову частину та висновок остаточно перевіряє вчитель; бали можуть змінитися.</p>'+
+  (miss.length&&!fin?'<div class="hint"><b class="t">Ще можна покращити результат:</b><ul style="margin:6px 0">'+miss.map(m=>'<li>'+m+'</li>').join('')+'</ul></div>':'')+
+  '</div><div class="card"><h2>Передати роботу вчителю</h2>'+
+  '<p>Натисніть «Завершити та зберегти файл» — завантажиться файл з вашими відповідями, скриншотами й висновком. Надішліть його вчителю (електронною поштою, через месенджер чи навчальну платформу).</p>'+
+  '<div class="btnrow"><button class="btn" onclick="finish()">Завершити та зберегти файл</button>'+
+  '<button class="btn sec" onclick="copyCode()">Скопіювати код результату</button>'+
+  (CFG.TEACHER_EMAIL?'<button class="btn sec" onclick="mailTeacher()">Надіслати листом</button>':'')+
+  '<button class="btn sec" onclick="window.print()">Друк / PDF</button></div>'+
+  (fin?'<div class="note">Файл сформовано. Якщо змінили відповіді — збережіть файл ще раз.</div>':'')+
+  '<p class="small">Код результату — це короткий текст без скриншотів; його можна вставити в повідомлення. Повний файл зі скриншотами надійніший.</p>'+
+  '<textarea id="codeBox" readonly style="display:none;min-height:90px"></textarea></div>';
+}
+function pack(withShots){
+  const c=JSON.parse(JSON.stringify(S)); delete c.page;
+  if(!withShots)c.tasks.forEach(t=>t.shot=null);
+  return {v:2,app:'fotosyntez-praktychna',max:MAXTOTAL,student:c.student,startedAt:c.startedAt,finishedAt:c.finishedAt,tasks:c.tasks,concl:c.concl};
+}
+function download(name,text,type){
+  const b=new Blob([text],{type:type||'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+}
+function fileName(){const s=S.student;return ('Результат_'+s.surname+'_'+s.name+'_'+s.cls).replace(/[\s\\\/:*?"<>|]+/g,'_')+'.json'}
+function finish(){
+  if(!studentOk()){go(0);return}
+  S.finishedAt=new Date().toISOString();save();
+  download(fileName(),JSON.stringify(pack(true)));render();
+}
+function encode(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))))}
+function decode(s){return JSON.parse(decodeURIComponent(escape(atob(s.trim()))))}
+function copyCode(){
+  if(!S.finishedAt){S.finishedAt=new Date().toISOString();save()}
+  const code=encode(pack(false)), box=$('codeBox'); box.style.display='block'; box.value=code; box.select();
+  try{navigator.clipboard.writeText(code).catch(()=>document.execCommand('copy'))}catch(e){try{document.execCommand('copy')}catch(e2){}}
+  box.scrollIntoView({block:'center'});
+}
+function mailTeacher(){
+  const s=S.student, tot=fmt(totalScore());
+  const body='Прізвище, ім’я: '+s.surname+' '+s.name+'\nКлас: '+s.cls+'\nБали (авто): '+tot+' / '+MAXTOTAL+'\n\nКод результату:\n'+encode(pack(false))+'\n\n(Файл зі скриншотами додайте до листа вручну.)';
+  location.href='mailto:'+CFG.TEACHER_EMAIL+'?subject='+encodeURIComponent('Практична робота: '+s.surname+' '+s.name+', '+s.cls)+'&body='+encodeURIComponent(body);
+}
+
+/* ============ ПОДІЇ ============ */
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.st){S.student[el.dataset.st]=el.value;save()}
+  else if(el.dataset.f!==undefined){
+    const x=S.tasks[+el.dataset.t].f[el.dataset.f]; x.v=el.value; x.wrong=false; save();
+    const st=el.parentNode.querySelector('.st'); if(st)st.remove();
+  }
+  else if(el.dataset.cconcl!==undefined){S.concl.text=el.value;save();refreshConcl()}
+});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset.file!==undefined){const i=+el.dataset.file;readImg(el.files[0],d=>setShot(i,d))}
+  else if(el.dataset.chk!==undefined){const a=el.dataset.chk.split(':');S.tasks[+a[0]].chk[+a[1]]=el.checked?1:0;save();refreshPts(+a[0])}
+  else if(el.dataset.cc!==undefined){S.concl.chk[+el.dataset.cc]=el.checked?1:0;save();refreshConcl()}
+});
+document.addEventListener('paste',e=>{
+  const i=curTask(); if(i===undefined)return;
+  const items=(e.clipboardData||{}).items||[];
+  for(const it of items){if(it.type.indexOf('image')===0){readImg(it.getAsFile(),d=>setShot(i,d));e.preventDefault();break}}
+});
+['dragover','dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{
+  const d=e.target.closest&&e.target.closest('[data-drop]'); if(!d)return;
+  e.preventDefault();
+  if(ev==='dragover')d.classList.add('over'); else d.classList.remove('over');
+  if(ev==='drop'){const f=e.dataTransfer.files[0];readImg(f,x=>setShot(+d.dataset.drop,x))}
+}));
+
+/* ============ КАБІНЕТ ВЧИТЕЛЯ ============ */
+const Teacher = {
+  ok:false, tab:'res', recs:[], sel:-1, msg:'', del:-1,
+  open(){
+    if(!this.ok){
+      this.drawLogin('');return;
+    }
+    this.draw();
+  },
+  drawLogin(err){
+    $('teacherRoot').innerHTML='<div class="overlay"><div class="panel" style="max-width:520px;margin-top:10vh"><h2>Кабінет вчителя</h2><label class="f" for="tpass">Пароль</label>'+
+      '<input type="password" id="tpass" style="width:100%;font:inherit;font-size:1.05rem;padding:10px 14px;border:2px solid #9db39f;border-radius:10px" onkeydown="if(event.key===\'Enter\')Teacher.login()" autofocus>'+
+      (err?'<div class="hint"><b class="t">'+err+'</b></div>':'')+
+      '<div class="btnrow"><button class="btn" onclick="Teacher.login()">Увійти</button><button class="btn sec" onclick="Teacher.close()">Скасувати</button></div></div></div>';
+    setTimeout(()=>{const e=$('tpass');if(e)e.focus()},50);
+  },
+  login(){
+    if($('tpass').value!==CFG.TEACHER_PASSWORD){this.drawLogin('Неправильний пароль.');return}
+    this.ok=true;
+    try{const r=localStorage.getItem(CFG.STORE+'_teacher');if(r)this.recs=JSON.parse(r)}catch(e){}
+    this.draw();
+  },
+  close(){$('teacherRoot').innerHTML=''},
+  persist(){try{localStorage.setItem(CFG.STORE+'_teacher',JSON.stringify(this.recs))}catch(e){try{const c=JSON.parse(JSON.stringify(this.recs));c.forEach(r=>r.tasks.forEach(t=>t.shot=null));localStorage.setItem(CFG.STORE+'_teacher',JSON.stringify(c))}catch(e2){}}},
+  add(o){
+    if(!o||!o.tasks||o.tasks.length!==TASKS.length||!o.student||!o.concl||!o.tasks[0].chk)return false;
+    const key=r=>[r.student.surname,r.student.name,r.student.cls].join('|').toLowerCase();
+    const k=key(o), idx=this.recs.findIndex(r=>key(r)===k);
+    if(idx>=0){ if((o.finishedAt||'')>=(this.recs[idx].finishedAt||'')){const old=this.recs[idx];o.grade=old.grade;o.tadj=old.tadj;o.cadj=old.cadj;this.recs[idx]=o} }
+    else this.recs.push(o);
+    return true;
+  },
+  async importFiles(files){
+    let n=0,bad=0;
+    for(const f of files){try{const t=await f.text();if(this.add(JSON.parse(t)))n++;else bad++}catch(e){bad++}}
+    this.persist();this.draw();
+    this.msg=bad?'Не вдалося прочитати файлів: '+bad:'';if(bad)this.draw();
+  },
+  importCode(){
+    const v=$('tcode').value.trim(); if(!v)return;
+    let ok=false; try{ok=this.add(decode(v))}catch(e){try{ok=this.add(JSON.parse(v))}catch(e2){}}
+    if(!ok){this.msg='Код не розпізнано.';this.draw();return}this.msg='';
+    this.persist();this.draw();
+  },
+  setGrade(i,v){this.recs[i].grade=v===''?'':Math.max(0,Math.min(12,Number(v)));this.persist()},
+  setT(n,i,v){const r=this.recs[n];r.tadj=r.tadj||[];r.tadj[i]=v===''?null:Math.max(0,Math.min(1,Number(String(v).replace(',','.'))));this.persist();this.draw()},
+  setC(n,v){const r=this.recs[n];r.cadj=v===''?null:Math.max(0,Math.min(2,Number(String(v).replace(',','.'))));this.persist();this.draw()},
+  remove(i){if(this.del!==i){this.del=i;this.draw();return}this.del=-1;this.recs.splice(i,1);this.sel=-1;this.persist();this.draw()},
+  csv(){
+    const head=['№','Прізвище','Ім’я','Клас'].concat(TASKS.map((_,i)=>'Задача '+(i+1))).concat(['Висновок','Сума балів','Оцінка (авто)','Оцінка вчителя','Дата здачі']);
+    const rows=this.recs.map((r,n)=>[n+1,r.student.surname,r.student.name,r.student.cls]
+      .concat(TASKS.map((_,i)=>fmt(taskScore(i,r).total)))
+      .concat([fmt(conclScore(r)),fmt(totalScore(r)),Math.round(totalScore(r)),isSet(r.grade)?r.grade:'',r.finishedAt?r.finishedAt.slice(0,16).replace('T',' '):'']));
+    const t=[head].concat(rows).map(a=>a.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+    download('Результати_учнів.csv','﻿'+t,'text/csv;charset=utf-8');
+  },
+  draw(){
+    let h='<div class="overlay"><div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><h2 style="margin:0">Кабінет вчителя</h2><button class="btn sec" onclick="Teacher.close()">Закрити ✕</button></div>'+
+      '<div class="tabs"><button class="'+(this.tab==='res'?'cur':'')+'" onclick="Teacher.tab=\'res\';Teacher.draw()">Результати учнів ('+this.recs.length+')</button><button class="'+(this.tab==='ans'?'cur':'')+'" onclick="Teacher.tab=\'ans\';Teacher.draw()">Відповіді та розв’язання</button></div>';
+    if(this.msg)h+='<div class="hint"><b class="t">'+esc(this.msg)+'</b></div>';
+    h+= this.tab==='ans'?this.drawAns():this.drawRes();
+    h+='</div></div>';
+    $('teacherRoot').innerHTML=h;
+  },
+  drawAns(){
+    let h='';
+    TASKS.forEach((t,i)=>{
+      h+='<div class="ex"><h3>Задача '+(i+1)+'</h3><p>'+esc(t.text)+'</p><table><tr><th>Що знайти</th><th class="c">Відповідь</th><th class="c">Допуск</th><th class="c">Балів</th></tr>'+
+      t.fields.map(f=>'<tr><td>'+esc(f.label)+'</td><td class="c"><b>'+fmt(f.ref)+'</b> '+esc(f.unit)+'</td><td class="c">±'+(f.tol*100)+' %'+(f.alt?'; також '+f.alt.join(', '):'')+'</td><td class="c">'+fmt(f.weight)+'</td></tr>').join('')+
+      '</table><b>Розв’язання (еталон для перевірки письмової частини):</b>'+t.sol+'</div>';
+    });
+    return h;
+  },
+  drawRes(){
+    let h='<div class="note">Завантажте файли результатів (.json), які надіслали учні, — можна вибрати одразу кілька. Або вставте код результату.</div>'+
+      '<div class="btnrow"><input type="file" id="tfiles" accept=".json,application/json" multiple style="display:none" onchange="Teacher.importFiles(this.files)"><button class="btn" onclick="$(\'tfiles\').click()">Завантажити файли учнів</button>'+
+      '<button class="btn sec" onclick="Teacher.csv()"'+(this.recs.length?'':' disabled')+'>Експорт у CSV (Excel)</button></div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><input type="text" id="tcode" placeholder="Вставте код результату учня" style="flex:1 1 300px"><button class="btn sec" onclick="Teacher.importCode()">Додати код</button></div>';
+    if(!this.recs.length)return h+'<p>Поки що немає жодного результату.</p>';
+    h+='<table><tr><th>№</th><th>Учень</th><th class="c">Клас</th>'+TASKS.map((_,i)=>'<th class="c">З'+(i+1)+'</th>').join('')+'<th class="c">Вис.</th><th class="c">Сума</th><th class="c">Авто</th><th class="c">Оцінка вчителя</th><th></th></tr>';
+    this.recs.forEach((r,n)=>{
+      h+='<tr class="clk'+(this.sel===n?' sel':'')+'" onclick="Teacher.sel=Teacher.sel==='+n+'?-1:'+n+';Teacher.draw()"><td>'+(n+1)+'</td><td><b>'+esc(r.student.surname)+' '+esc(r.student.name)+'</b></td><td class="c">'+esc(r.student.cls)+'</td>'+
+      TASKS.map((_,i)=>'<td class="c">'+fmt(taskScore(i,r).total)+'</td>').join('')+
+      '<td class="c">'+fmt(conclScore(r))+'</td><td class="c"><b>'+fmt(totalScore(r))+'</b></td><td class="c">'+Math.round(totalScore(r))+'</td>'+
+      '<td class="c" onclick="event.stopPropagation()"><input type="text" inputmode="numeric" style="width:70px;padding:4px 8px;text-align:center" value="'+(isSet(r.grade)?esc(r.grade):'')+'" placeholder="'+Math.round(totalScore(r))+'" oninput="Teacher.setGrade('+n+',this.value)"></td>'+
+      '<td onclick="event.stopPropagation()"><button class="btn sec" style="padding:4px 10px" onclick="Teacher.remove('+n+')">'+(this.del===n?'Видалити?':'✕')+'</button></td></tr>';
+    });
+    h+='</table><p class="small">Клацніть рядок, щоб переглянути відповіді, скриншоти, самооцінку й висновок. У колонці «Оцінка вчителя» можна ввести власну оцінку (0–12); якщо порожньо — береться автоматична.</p>';
+    if(this.sel>=0&&this.recs[this.sel]){
+      const n=this.sel, r=this.recs[n];
+      h+='<div class="ex"><h3>'+esc(r.student.surname)+' '+esc(r.student.name)+', '+esc(r.student.cls)+' клас</h3><p class="small">'+(r.finishedAt?'Здано: '+esc(r.finishedAt.slice(0,16).replace('T',' ')):'Не завершено учнем')+'</p>';
+      TASKS.forEach((t,i)=>{
+        const s=r.tasks[i], sc=taskScore(i,r), wa=wrAuto(s);
+        h+='<h3>Задача '+(i+1)+' — '+fmt(sc.total)+' б. <span class="small">(відповідь '+fmt(sc.a)+', письмова частина '+fmt(sc.wr)+')</span></h3>'+
+        '<table><tr><th>Поле</th><th class="c">Відповідь учня</th><th class="c">Еталон</th><th class="c">Статус</th></tr>'+
+        t.fields.map(f=>{const x=s.f[f.id];return '<tr><td>'+esc(f.label)+'</td><td class="c">'+esc(x.v||'—')+' '+esc(f.unit)+'</td><td class="c">'+fmt(f.ref)+'</td><td class="c">'+(x.ok?'✓ спроба '+x.att:'✗')+'</td></tr>'}).join('')+'</table>'+
+        '<p><b>Самооцінка учня:</b> '+WR.map((c,k)=>(s.chk[k]?'✓':'✗')+' '+c.t.split(':')[0]).join(' &nbsp;|&nbsp; ')+'</p>'+
+        '<p><b>Письмова частина, балів (0–1):</b> <input type="text" inputmode="decimal" style="width:90px;padding:4px 8px;text-align:center" value="'+(r.tadj&&isSet(r.tadj[i])?esc(r.tadj[i]):'')+'" placeholder="'+fmt(wa)+'" onchange="Teacher.setT('+n+','+i+',this.value)"> <span class="small">порожньо — за самооцінкою учня ('+fmt(wa)+'); введіть число, щоб змінити</span></p>'+
+        (s.shot?'<img class="shot" src="'+s.shot+'" alt="Скриншот">':'<p class="small"><i>Скриншот відсутній'+(r.tasks.some(x=>x.shot)?'':' (або не збережено в коді результату)')+'</i></p>');
+      });
+      h+='<h3>Висновок — '+fmt(conclScore(r))+' / 2 б. <span class="small">('+words(r.concl.text)+' слів)</span></h3><div class="cond" style="white-space:pre-wrap">'+(r.concl.text?esc(r.concl.text):'<i>немає</i>')+'</div>'+
+        '<p><b>Самооцінка учня:</b></p><ul>'+CR.map((c,k)=>'<li>'+(r.concl.chk[k]?'✓ ':'✗ ')+c.t+'</li>').join('')+'</ul>'+
+        '<p><b>Бали за висновок (0–2):</b> <input type="text" inputmode="decimal" style="width:90px;padding:4px 8px;text-align:center" value="'+(isSet(r.cadj)?esc(r.cadj):'')+'" placeholder="'+fmt(conclAuto(r))+'" onchange="Teacher.setC('+n+',this.value)"> <span class="small">порожньо — за самооцінкою ('+fmt(conclAuto(r))+')</span></p>';
+      h+='</div>';
+    }
+    return h;
+  }
+};
+
+render();
+</script>
+</body>
+</html>
